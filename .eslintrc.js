@@ -1,8 +1,9 @@
+const ON = 2;
+const OFF = 0;
+const WARN = 1;
+
 module.exports = {
-  parserOptions: {
-    project: 'tsconfig.json',
-  },
-  ignorePatterns: ['.eslintrc.*', 'playwright.config.ts', 'vite.config.*', 'dist/**/*', 'build/**/*', '**/babel-*/*'],
+  ignorePatterns: ['.eslintrc.*', 'playwright.config.ts', 'vite.config.*', 'dist/**/*', 'build/**/*', '**/*.d.ts'],
   env: {
     es6: true,
     browser: true,
@@ -26,7 +27,7 @@ module.exports = {
     JSX: true,
   },
   parserOptions: {
-    project: 'tsconfig.json',
+    project: './tsconfig.json',
   },
   settings: {
     'import/resolver': {

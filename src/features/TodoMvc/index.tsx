@@ -5,7 +5,7 @@ import { TodoList } from './components/TodoList';
 import { UnderBar } from './components/UnderBar';
 import { UUID } from '../../libs/utils/uuid';
 import type { ApplicationState } from '../../common/context/Application';
-import * as styles from './index.module.css';
+import styles from './index.module.css';
 
 type TodoListProps = ComponentProps<typeof TodoList>;
 
@@ -17,10 +17,10 @@ type Props = {
 
 export const TodoMvc = ({ appState, setAppState, pathname }: Props): JSX.Element => {
   const { todoList } = appState;
-  const hasCompleted = useMemo(() => todoList.some((t) => t.completed), [todoList]);
-  const backlogCount = useMemo(() => todoList.filter((t) => !t.completed).length, [todoList]);
+  const hasCompleted = useMemo(() => todoList.some(t => t.completed), [todoList]);
+  const backlogCount = useMemo(() => todoList.filter(t => !t.completed).length, [todoList]);
   const filteredTodoList = useMemo(
-    () => todoList.filter((t) => pathname === '/' || (pathname === '/active' ? !t.completed : t.completed)),
+    () => todoList.filter(t => pathname === '/' || (pathname === '/active' ? !t.completed : t.completed)),
     [pathname, todoList],
   );
 
@@ -41,15 +41,15 @@ export const TodoMvc = ({ appState, setAppState, pathname }: Props): JSX.Element
   );
 
   const removeHandler = useCallback<TodoListProps['onRemove']>(
-    (id) => setAppState(({ todoList, ...rest }) => ({ ...rest, todoList: todoList.filter((t) => t.id !== id) })),
+    id => setAppState(({ todoList, ...rest }) => ({ ...rest, todoList: todoList.filter(t => t.id !== id) })),
     [setAppState],
   );
 
   const toggleHandler = useCallback<TodoListProps['onToggle']>(
-    (id) => {
+    id => {
       setAppState(({ todoList, ...rest }) => ({
         ...rest,
-        todoList: todoList.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)),
+        todoList: todoList.map(t => (t.id === id ? { ...t, completed: !t.completed } : t)),
       }));
     },
     [setAppState],
@@ -59,17 +59,17 @@ export const TodoMvc = ({ appState, setAppState, pathname }: Props): JSX.Element
     (id, bodyText) => {
       setAppState(({ todoList, ...rest }) => ({
         ...rest,
-        todoList: todoList.map((t) => (t.id === id ? { ...t, bodyText } : t)),
+        todoList: todoList.map(t => (t.id === id ? { ...t, bodyText } : t)),
       }));
     },
     [setAppState],
   );
 
   const toggleAllCheckboxHandler = useCallback<TodoListProps['onToggleAll']>(
-    (checked) => {
+    checked => {
       setAppState(({ todoList, ...rest }) => ({
         ...rest,
-        todoList: todoList.map((t) => ({ ...t, completed: checked })),
+        todoList: todoList.map(t => ({ ...t, completed: checked })),
       }));
     },
     [setAppState],
