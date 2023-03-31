@@ -1,0 +1,69 @@
+{
+  "name": "react-typescript-todomvc-2022",
+  "version": "0.0.1",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "run-s gen:* dev:*",
+    "dev:vite": "vite",
+    "gen": "run-p gen:*",
+    "gen:css-types": "tcm src",
+    "build": "vite build",
+    "test": "cross-env NODE_ENV=test vitest",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
+    "prettier": "prettier --write \"**/*.+(json|yml|css|md|mdx)\"",
+    "typecheck": "pnpm gen && tsc --noEmit"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version"
+    ]
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.8.1"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^8.20.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/node": "^18.14.0",
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "@types/styled-components": "^5.1.26",
+    "@types/testing-library__jest-dom": "^5.14.5",
+    "@typescript-eslint/eslint-plugin": "^5.52.0",
+    "@typescript-eslint/parser": "^5.52.0",
+    "@vitejs/plugin-react": "^3.1.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.34.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jest-dom": "^4.0.3",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-playwright": "^0.11.2",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-regexp": "^1.12.0",
+    "eslint-plugin-testing-library": "^5.10.2",
+    "eslint-plugin-unicorn": "^45.0.2",
+    "eslint-plugin-vitest": "^0.0.21",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.8.4",
+    "prettier-plugin-organize-imports": "^3.2.2",
+    "rimraf": "^3.0.2",
+    "typed-css-modules": "^0.7.2",
+    "typescript": "^4.9.5",
+    "vite": "^4.1.3",
+    "vitest": "^0.26.3"
+  }
+}

@@ -1,0 +1,29 @@
+pre-commit:
+  commands:
+    packages/frontend/ts,tsx:
+      root: 'packages/frontend/'
+      glob: '*.{ts,tsx}'
+      run: >
+        pnpm prettier --write {staged_files}
+        && pnpm eslint --fix {staged_files}
+        && git add {staged_files}
+    packages/frontend/css:
+      root: 'packages/frontend/'
+      glob: '*.css'
+      run: >
+        pnpm prettier --write {staged_files}
+        && pnpm stylelint --fix {staged_files}
+        && git add {staged_files}
+    packages/frontend/json,yaml,yml:
+      root: 'packages/frontend/'
+      glob: '*.{json,yaml,yml}'
+      exclude: 'package.json|pnpm-lock.yaml'
+      run: >
+        pnpm prettier --write {staged_files}
+        && git add {staged_files}
+    packages/frontend/sort-package-json:
+      root: 'packages/frontend/'
+      glob: 'package.json'
+      run: >
+        pnpm sort-package-json
+        && git add {staged_files}
