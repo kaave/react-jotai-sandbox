@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
 import { useContext, useCallback, useReducer, createContext } from 'react';
 import { LocalStorageKey } from '../../../application/model';
-import type { ApplicationState, Todo } from './model';
+import type { ApplicationState } from './model';
+import type { Todo } from '../../../features/TodoMvc/models/Todo';
 
 export * from './model';
 
@@ -69,10 +70,10 @@ function useApplicationContextCore(initialState: Readonly<ApplicationState>): {
   dispatcher: ProvideDispatcher;
 } {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const add = useCallback<ProvideDispatcher['add']>((todos) => dispatch({ type: 'added', payload: { todos } }), []);
-  const remove = useCallback<ProvideDispatcher['remove']>((ids) => dispatch({ type: 'removed', payload: { ids } }), []);
+  const add = useCallback<ProvideDispatcher['add']>(todos => dispatch({ type: 'added', payload: { todos } }), []);
+  const remove = useCallback<ProvideDispatcher['remove']>(ids => dispatch({ type: 'removed', payload: { ids } }), []);
   const update = useCallback<ProvideDispatcher['update']>(
-    (todos) => dispatch({ type: 'updated', payload: { todos } }),
+    todos => dispatch({ type: 'updated', payload: { todos } }),
     [],
   );
 

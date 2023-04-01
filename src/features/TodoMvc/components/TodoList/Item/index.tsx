@@ -2,9 +2,10 @@
 import type { ChangeEventHandler, FocusEventHandler, FormEventHandler } from 'react';
 import { useRef, useState, useEffect, useCallback } from 'react';
 import * as styles from './index.module.css';
+import type { Uuid } from '../../../../../libs/utils/uuid';
 
 type Props = {
-  id: string;
+  id: Uuid;
   bodyText: string;
   completed: boolean;
   onToggle: (id: string) => void;
@@ -26,12 +27,12 @@ export const Item = ({ id, bodyText, completed, onToggle, onChangeText, onRemove
   const toggleHandler = useCallback(() => onToggle(id), [id, onToggle]);
   const clickRemoveButtonHandler = useCallback(() => onRemove(id), [id, onRemove]);
   const changeTextHandler = useCallback<ChangeEventHandler<HTMLInputElement>>(
-    (event) => setTemporaryName(event.currentTarget.value),
+    event => setTemporaryName(event.currentTarget.value),
     [],
   );
 
   const handleSubmit = useCallback<FormEventHandler<HTMLFormElement>>(
-    (event) => {
+    event => {
       event.preventDefault();
 
       setEditing(false);

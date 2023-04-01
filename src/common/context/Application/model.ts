@@ -1,8 +1,4 @@
-export type Todo = {
-  id: string;
-  bodyText: string;
-  completed: boolean;
-};
+import type { Todo } from '../../../features/TodoMvc/models/Todo';
 
 export type ApplicationState = {
   todoList: readonly Todo[];

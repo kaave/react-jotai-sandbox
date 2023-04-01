@@ -1,6 +1,6 @@
 import type { ErrorInfo, ReactNode } from 'react';
 import { Component } from 'react';
-import type { Maybe } from '../../../common/helpers/types';
+import type { Maybe } from '../../../libs/utils/types';
 import { ErrorBoundaryFallbackComponent } from './Fallback';
 
 interface Props {

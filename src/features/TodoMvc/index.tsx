@@ -3,9 +3,10 @@ import { useCallback, useMemo } from 'react';
 import { NewTodoInput } from './components/NewTodoInput';
 import { TodoList } from './components/TodoList';
 import { UnderBar } from './components/UnderBar';
-import { UUID } from '../../libs/utils/uuid';
+import { genUuid } from '../../libs/utils/uuid';
 import type { ApplicationState } from '../../common/context/Application';
 import styles from './index.module.css';
+import { bodyText } from './models/Todo/bodyText';
 
 type TodoListProps = ComponentProps<typeof TodoList>;
 
@@ -25,18 +26,24 @@ export const TodoMvc = ({ appState, setAppState, pathname }: Props): JSX.Element
   );
 
   const handleAdd = useCallback(
-    (todoName: string) =>
+    (todoName: string) => {
+      const bodyTextProposal = bodyText(todoName);
+      if (bodyTextProposal instanceof Error) {
+        return;
+      }
+
       setAppState(({ todoList, ...rest }) => ({
         ...rest,
         todoList: [
           {
-            bodyText: todoName,
+            bodyText: bodyTextProposal,
             completed: false,
-            id: UUID(),
+            id: genUuid(),
           },
           ...todoList,
         ],
-      })),
+      }));
+    },
     [setAppState],
   );
 
@@ -56,10 +63,15 @@ export const TodoMvc = ({ appState, setAppState, pathname }: Props): JSX.Element
   );
 
   const handleChangeText = useCallback<TodoListProps['onChangeText']>(
-    (id, bodyText) => {
+    (id, todoBodyText) => {
+      const bodyTextProposal = bodyText(todoBodyText);
+      if (bodyTextProposal instanceof Error) {
+        return;
+      }
+
       setAppState(({ todoList, ...rest }) => ({
         ...rest,
-        todoList: todoList.map(t => (t.id === id ? { ...t, bodyText } : t)),
+        todoList: todoList.map(t => (t.id === id ? { ...t, bodyTextProposal } : t)),
       }));
     },
     [setAppState],
