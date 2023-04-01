@@ -6,14 +6,12 @@ import { LocalStorageKey } from './model';
 import type { ComponentProps } from 'react';
 import { useCallback, useEffect } from 'react';
 import type { ApplicationState } from '../common/context/Application';
-import { useApplicationDispatch, useApplicationState, ApplicationProvider } from '../common/context/Application';
+import { useApplicationCommands, useApplicationQuery } from '../common/context/Application';
 
 export const App = (): JSX.Element => (
   <ErrorBoundary>
     <BrowserRouter>
-      <ApplicationProvider>
-        <Core />
-      </ApplicationProvider>
+      <Core />
     </BrowserRouter>
   </ErrorBoundary>
 );
@@ -21,8 +19,8 @@ export const App = (): JSX.Element => (
 type SetAppState = (fn: (prevState: ApplicationState) => ApplicationState) => void;
 
 const Core = (): JSX.Element => {
-  const appState = useApplicationState();
-  const dispatcher = useApplicationDispatch();
+  const appState = useApplicationQuery();
+  const dispatcher = useApplicationCommands();
 
   const setAppState = useCallback<SetAppState>(fn => dispatcher.update(fn(appState).todos), [appState, dispatcher]);
 
