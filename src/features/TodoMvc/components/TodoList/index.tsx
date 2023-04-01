@@ -19,7 +19,7 @@ export const TodoList = ({ todoList, onRemove, onToggle, onChangeText, onToggleA
   const toggleAllCheckbox = useCallback<ChangeEventHandler<HTMLInputElement>>(
     ({ target: { checked } }) => {
       onToggleAll(checked);
-      setChecked((b) => !b);
+      setChecked(b => !b);
     },
     [onToggleAll],
   );
