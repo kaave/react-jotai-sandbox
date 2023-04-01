@@ -17,12 +17,12 @@ type Props = {
 };
 
 export const TodoMvc = ({ appState, setAppState, pathname }: Props): JSX.Element => {
-  const { todoList } = appState;
-  const hasCompleted = useMemo(() => todoList.some(t => t.completed), [todoList]);
-  const backlogCount = useMemo(() => todoList.filter(t => !t.completed).length, [todoList]);
+  const { todos } = appState;
+  const hasCompleted = useMemo(() => todos.some(t => t.completed), [todos]);
+  const backlogCount = useMemo(() => todos.filter(t => !t.completed).length, [todos]);
   const filteredTodoList = useMemo(
-    () => todoList.filter(t => pathname === '/' || (pathname === '/active' ? !t.completed : t.completed)),
-    [pathname, todoList],
+    () => todos.filter(t => pathname === '/' || (pathname === '/active' ? !t.completed : t.completed)),
+    [pathname, todos],
   );
 
   const handleAdd = useCallback(
@@ -32,15 +32,15 @@ export const TodoMvc = ({ appState, setAppState, pathname }: Props): JSX.Element
         return;
       }
 
-      setAppState(({ todoList, ...rest }) => ({
+      setAppState(({ todos, ...rest }) => ({
         ...rest,
-        todoList: [
+        todos: [
           {
             bodyText: bodyTextProposal,
             completed: false,
             id: genUuid(),
           },
-          ...todoList,
+          ...todos,
         ],
       }));
     },
@@ -48,15 +48,15 @@ export const TodoMvc = ({ appState, setAppState, pathname }: Props): JSX.Element
   );
 
   const removeHandler = useCallback<TodoListProps['onRemove']>(
-    id => setAppState(({ todoList, ...rest }) => ({ ...rest, todoList: todoList.filter(t => t.id !== id) })),
+    id => setAppState(({ todos, ...rest }) => ({ ...rest, todos: todos.filter(t => t.id !== id) })),
     [setAppState],
   );
 
   const toggleHandler = useCallback<TodoListProps['onToggle']>(
     id => {
-      setAppState(({ todoList, ...rest }) => ({
+      setAppState(({ todos, ...rest }) => ({
         ...rest,
-        todoList: todoList.map(t => (t.id === id ? { ...t, completed: !t.completed } : t)),
+        todos: todos.map(t => (t.id === id ? { ...t, completed: !t.completed } : t)),
       }));
     },
     [setAppState],
@@ -69,9 +69,9 @@ export const TodoMvc = ({ appState, setAppState, pathname }: Props): JSX.Element
         return;
       }
 
-      setAppState(({ todoList, ...rest }) => ({
+      setAppState(({ todos, ...rest }) => ({
         ...rest,
-        todoList: todoList.map(t => (t.id === id ? { ...t, bodyTextProposal } : t)),
+        todos: todos.map(t => (t.id === id ? { ...t, bodyTextProposal } : t)),
       }));
     },
     [setAppState],
@@ -79,9 +79,9 @@ export const TodoMvc = ({ appState, setAppState, pathname }: Props): JSX.Element
 
   const toggleAllCheckboxHandler = useCallback<TodoListProps['onToggleAll']>(
     checked => {
-      setAppState(({ todoList, ...rest }) => ({
+      setAppState(({ todos, ...rest }) => ({
         ...rest,
-        todoList: todoList.map(t => ({ ...t, completed: checked })),
+        todos: todos.map(t => ({ ...t, completed: checked })),
       }));
     },
     [setAppState],
@@ -89,9 +89,9 @@ export const TodoMvc = ({ appState, setAppState, pathname }: Props): JSX.Element
 
   const handleClearCompleted = useCallback(
     () =>
-      setAppState(({ todoList, ...prev }) => ({
+      setAppState(({ todos, ...prev }) => ({
         ...prev,
-        todoList: todoList.filter(({ completed }) => !completed),
+        todos: todos.filter(({ completed }) => !completed),
       })),
     [setAppState],
   );
@@ -100,10 +100,10 @@ export const TodoMvc = ({ appState, setAppState, pathname }: Props): JSX.Element
     <div>
       <section className={styles.todoapp}>
         <NewTodoInput onAdd={handleAdd} />
-        {todoList.length > 0 ? (
+        {todos.length > 0 ? (
           <>
             <TodoList
-              todoList={filteredTodoList}
+              todos={filteredTodoList}
               onRemove={removeHandler}
               onToggle={toggleHandler}
               onChangeText={handleChangeText}

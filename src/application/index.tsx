@@ -24,7 +24,7 @@ const Core = (): JSX.Element => {
   const appState = useApplicationState();
   const dispatcher = useApplicationDispatch();
 
-  const setAppState = useCallback<SetAppState>(fn => dispatcher.update(fn(appState).todoList), [appState, dispatcher]);
+  const setAppState = useCallback<SetAppState>(fn => dispatcher.update(fn(appState).todos), [appState, dispatcher]);
 
   // if appState has changes, save it LocalStorage.
   useEffect(() => {

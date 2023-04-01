@@ -7,14 +7,14 @@ import * as styles from './index.module.css';
 type ItemProps = ComponentProps<typeof Item>;
 
 type Props = {
-  todoList: ApplicationState['todoList'];
+  todos: ApplicationState['todos'];
   onRemove: ItemProps['onRemove'];
   onToggle: ItemProps['onToggle'];
   onChangeText: ItemProps['onChangeText'];
   onToggleAll: (checked: boolean) => void;
 };
 
-export const TodoList = ({ todoList, onRemove, onToggle, onChangeText, onToggleAll }: Props): JSX.Element => {
+export const TodoList = ({ todos, onRemove, onToggle, onChangeText, onToggleAll }: Props): JSX.Element => {
   const [checked, setChecked] = useState(false);
   const toggleAllCheckbox = useCallback<ChangeEventHandler<HTMLInputElement>>(
     ({ target: { checked } }) => {
@@ -35,7 +35,7 @@ export const TodoList = ({ todoList, onRemove, onToggle, onChangeText, onToggleA
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
       <ul className={styles.todoList}>
-        {todoList.map(({ id, bodyText, completed }) => (
+        {todos.map(({ id, bodyText, completed }) => (
           <Item
             key={id}
             id={id}

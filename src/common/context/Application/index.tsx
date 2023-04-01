@@ -20,28 +20,28 @@ type ProvideDispatcher = {
 const stringifiedJSON = window.localStorage.getItem(LocalStorageKey.APP_STATE);
 
 const INITIAL_STATE: Readonly<ApplicationState> =
-  typeof stringifiedJSON === 'string' ? (JSON.parse(stringifiedJSON) as ApplicationState) : { todoList: [] };
+  typeof stringifiedJSON === 'string' ? (JSON.parse(stringifiedJSON) as ApplicationState) : { todos: [] };
 
 const reducer = (state: Readonly<ApplicationState>, action: Action): Readonly<ApplicationState> => {
   switch (action.type) {
     case 'added': {
       return {
         ...state,
-        todoList: [...state.todoList, ...action.payload.todos],
+        todos: [...state.todos, ...action.payload.todos],
       };
     }
 
     case 'removed': {
       return {
         ...state,
-        todoList: state.todoList.filter(({ id }) => !action.payload.ids.includes(id)),
+        todos: state.todos.filter(({ id }) => !action.payload.ids.includes(id)),
       };
     }
 
     case 'updated': {
       return {
         ...state,
-        todoList: action.payload.todos,
+        todos: action.payload.todos,
       };
     }
   }
