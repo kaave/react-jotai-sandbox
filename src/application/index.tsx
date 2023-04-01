@@ -2,11 +2,10 @@ import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { NotFound } from '../features/NotFound';
 import { TodoMvc } from '../features/TodoMvc';
-import { LocalStorageKey } from './model';
-import type { ComponentProps } from 'react';
-import { useCallback, useEffect } from 'react';
-import type { ApplicationState } from '../common/context/Application';
-import { useApplicationCommands, useApplicationQuery } from '../common/context/Application';
+// import { LocalStorageKey } from './model';
+// import type { ComponentProps } from 'react';
+// import { useEffect } from 'react';
+// import { useApplicationQuery } from '../common/context/Application';
 
 export const App = (): JSX.Element => (
   <ErrorBoundary>
@@ -16,38 +15,35 @@ export const App = (): JSX.Element => (
   </ErrorBoundary>
 );
 
-type SetAppState = (fn: (prevState: ApplicationState) => ApplicationState) => void;
+// type SetAppState = (fn: (prevState: ApplicationState) => ApplicationState) => void;
 
-const Core = (): JSX.Element => {
-  const appState = useApplicationQuery();
-  const dispatcher = useApplicationCommands();
+const Core = (): JSX.Element => 
+  // const appState = useApplicationQuery();
+  // const dispatcher = useApplicationCommands();
 
-  const setAppState = useCallback<SetAppState>(fn => dispatcher.update(fn(appState).todos), [appState, dispatcher]);
+  // const setAppState = useCallback<SetAppState>(fn => dispatcher.update(fn(appState).todos), [appState, dispatcher]);
 
   // if appState has changes, save it LocalStorage.
-  useEffect(() => {
-    window.localStorage.setItem(
-      LocalStorageKey.APP_STATE,
-      JSON.stringify(appState), // convert JavaScript Object to string
-    );
-  }, [appState]);
+  // useEffect(() => {
+  //   window.localStorage.setItem(
+  //     LocalStorageKey.APP_STATE,
+  //     JSON.stringify(appState), // convert JavaScript Object to string
+  //   );
+  // }, [appState]);
 
-  return (
-    <Routes>
-      {/* Note: こうしないと pathname なしが NotFound にマッチしてしまう */}
-      <Route path="/" element={<TodoMvcElement appState={appState} setAppState={setAppState} />}>
-        <Route path=":pathname" />
-      </Route>
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  );
-};
+   (
+     <Routes>
+       {/* Note: こうしないと pathname なしが NotFound にマッチしてしまう */}
+       <Route path="/" element={<TodoMvcElement />}>
+         <Route path=":pathname" />
+       </Route>
+       <Route path="*" element={<NotFound />} />
+     </Routes>
+  )
+;
 
-const TodoMvcElement = ({
-  appState,
-  setAppState,
-}: Pick<ComponentProps<typeof TodoMvc>, 'appState' | 'setAppState'>): JSX.Element => {
+const TodoMvcElement = (): JSX.Element => {
   const { pathname = '' } = useParams();
 
-  return <TodoMvc appState={appState} setAppState={setAppState} pathname={`/${pathname}`} />;
+  return <TodoMvc pathname={`/${pathname}`} />;
 };

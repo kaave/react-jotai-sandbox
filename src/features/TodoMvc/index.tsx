@@ -3,21 +3,23 @@ import { useCallback, useMemo } from 'react';
 import { NewTodoInput } from './components/NewTodoInput';
 import { TodoList } from './components/TodoList';
 import { UnderBar } from './components/UnderBar';
-import { genUuid } from '../../libs/utils/uuid';
-import type { ApplicationState } from '../../common/context/Application';
+import { uuid } from '../../libs/utils/uuid';
 import styles from './index.module.css';
 import { bodyText } from './models/Todo/bodyText';
+import { useTodosCommands, useTodosQuery } from './states/todos';
+import { useNewTodo } from './interactors/newTodo';
 
 type TodoListProps = ComponentProps<typeof TodoList>;
 
 type Props = {
-  appState: ApplicationState;
-  setAppState: (fn: (prevState: ApplicationState) => ApplicationState) => void;
   pathname: string;
 };
 
-export const TodoMvc = ({ appState, setAppState, pathname }: Props): JSX.Element => {
-  const { todos } = appState;
+export const TodoMvc = ({ pathname }: Props): JSX.Element => {
+  const todos = useTodosQuery();
+  const { update, remove } = useTodosCommands();
+  const newTodo = useNewTodo();
+
   const hasCompleted = useMemo(() => todos.some(t => t.completed), [todos]);
   const backlogCount = useMemo(() => todos.filter(t => !t.completed).length, [todos]);
   const filteredTodoList = useMemo(
@@ -32,68 +34,47 @@ export const TodoMvc = ({ appState, setAppState, pathname }: Props): JSX.Element
         return;
       }
 
-      setAppState(({ todos, ...rest }) => ({
-        ...rest,
-        todos: [
-          {
-            bodyText: bodyTextProposal,
-            completed: false,
-            id: genUuid(),
-          },
-          ...todos,
-        ],
-      }));
+      newTodo(bodyTextProposal);
     },
-    [setAppState],
+    [newTodo],
   );
 
   const removeHandler = useCallback<TodoListProps['onRemove']>(
-    id => setAppState(({ todos, ...rest }) => ({ ...rest, todos: todos.filter(t => t.id !== id) })),
-    [setAppState],
+    idProposal => {
+      const id = uuid(idProposal);
+      if (!(id instanceof Error)) {
+        remove([id]);
+      }
+    },
+    [remove],
   );
 
   const toggleHandler = useCallback<TodoListProps['onToggle']>(
-    id => {
-      setAppState(({ todos, ...rest }) => ({
-        ...rest,
-        todos: todos.map(t => (t.id === id ? { ...t, completed: !t.completed } : t)),
-      }));
-    },
-    [setAppState],
+    id => update(todos.map(t => (t.id === id ? { ...t, completed: !t.completed } : t))),
+    [todos, update],
   );
 
   const handleChangeText = useCallback<TodoListProps['onChangeText']>(
-    (id, todoBodyText) => {
+    (todoId, todoBodyText) => {
+      const id = uuid(todoId);
       const bodyTextProposal = bodyText(todoBodyText);
-      if (bodyTextProposal instanceof Error) {
+      if (id instanceof Error || bodyTextProposal instanceof Error) {
         return;
       }
 
-      setAppState(({ todos, ...rest }) => ({
-        ...rest,
-        todos: todos.map(t => (t.id === id ? { ...t, bodyTextProposal } : t)),
-      }));
+      update(todos.map(t => (t.id === id ? { ...t, bodyText: bodyTextProposal } : t)));
     },
-    [setAppState],
+    [todos, update],
   );
 
   const toggleAllCheckboxHandler = useCallback<TodoListProps['onToggleAll']>(
-    checked => {
-      setAppState(({ todos, ...rest }) => ({
-        ...rest,
-        todos: todos.map(t => ({ ...t, completed: checked })),
-      }));
-    },
-    [setAppState],
+    checked => update(todos.map(t => ({ ...t, completed: checked }))),
+    [todos, update],
   );
 
   const handleClearCompleted = useCallback(
-    () =>
-      setAppState(({ todos, ...prev }) => ({
-        ...prev,
-        todos: todos.filter(({ completed }) => !completed),
-      })),
-    [setAppState],
+    () => remove(todos.filter(({ completed }) => completed).map(({ id }) => id)),
+    [remove, todos],
   );
 
   return (
