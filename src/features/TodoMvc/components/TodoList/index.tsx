@@ -1,13 +1,13 @@
 import type { ChangeEventHandler, ComponentProps } from 'react';
 import { useState, useCallback } from 'react';
-import type { ApplicationState } from '../../../../common/context/Application';
 import { Item } from './Item';
 import * as styles from './index.module.css';
+import type { Todo } from '../../models/Todo';
 
 type ItemProps = ComponentProps<typeof Item>;
 
 type Props = {
-  todos: ApplicationState['todos'];
+  todos: readonly Todo[];
   onRemove: ItemProps['onRemove'];
   onToggle: ItemProps['onToggle'];
   onChangeText: ItemProps['onChangeText'];
