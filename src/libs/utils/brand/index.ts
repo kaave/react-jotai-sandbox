@@ -41,9 +41,16 @@ type Brand<Name extends string, Type extends string | number = string> = Type & 
 export function brand<Name extends string, Input extends string | number = string>(
   name: Name,
   validator: (input: Input) => boolean,
-): (input: Input) => Brand<Name, Input> | Error {
-  return (input: Input) =>
-    validator(input) ? (input as Brand<Name, Input>) : new Error(`\`${input}\` is not valid ${name}`);
+): { (input: Input): Brand<Name, Input> | Error; (input: Input, unsafe: 'unsafe'): Brand<Name, Input> } {
+  function factory(input: Input): Brand<Name, Input> | Error;
+  function factory(input: Input, unsafe: 'unsafe'): Brand<Name, Input>;
+  function factory(input: Input, unsafe?: 'unsafe'): Brand<Name, Input> | Error {
+    return unsafe === 'unsafe' || validator(input)
+      ? (input as Brand<Name, Input>)
+      : new Error(`\`${input}\` is not valid ${name}`);
+  }
+
+  return factory;
 }
 
 /**
