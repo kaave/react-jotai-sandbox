@@ -8,6 +8,7 @@ import styles from './index.module.css';
 import { bodyText } from './models/Todo/bodyText';
 import { useTodosCommands, useTodosQuery } from './states/todos';
 import { useNewTodo } from './interactors/newTodo';
+import { useDeleteTodo } from './interactors/deleteTodo';
 
 type TodoListProps = ComponentProps<typeof TodoList>;
 
@@ -17,8 +18,9 @@ type Props = {
 
 export const TodoMvc = ({ pathname }: Props): JSX.Element => {
   const todos = useTodosQuery();
-  const { update, remove } = useTodosCommands();
+  const { update } = useTodosCommands();
   const newTodo = useNewTodo();
+  const deleteTodo = useDeleteTodo();
 
   const hasCompleted = useMemo(() => todos.some(t => t.completed), [todos]);
   const backlogCount = useMemo(() => todos.filter(t => !t.completed).length, [todos]);
@@ -43,10 +45,10 @@ export const TodoMvc = ({ pathname }: Props): JSX.Element => {
     idProposal => {
       const id = uuid(idProposal);
       if (!(id instanceof Error)) {
-        remove([id]);
+        deleteTodo([id]);
       }
     },
-    [remove],
+    [deleteTodo],
   );
 
   const toggleHandler = useCallback<TodoListProps['onToggle']>(
@@ -73,8 +75,8 @@ export const TodoMvc = ({ pathname }: Props): JSX.Element => {
   );
 
   const handleClearCompleted = useCallback(
-    () => remove(todos.filter(({ completed }) => completed).map(({ id }) => id)),
-    [remove, todos],
+    () => deleteTodo(todos.filter(({ completed }) => completed).map(({ id }) => id)),
+    [deleteTodo, todos],
   );
 
   return (
