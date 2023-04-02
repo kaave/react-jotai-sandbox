@@ -1,3 +1,5 @@
+# 動きません
+
 pre-commit:
   commands:
     packages/frontend/ts,tsx:

@@ -1,5 +1,7 @@
-const ERROR = 2;
-const OFF = 0;
+/**
+ * @file 大まかな複雑性を ESLint で図るための設定。
+ */
+
 const WARN = 1;
 
 module.exports = {
@@ -34,14 +36,14 @@ module.exports = {
     },
   },
   rules: {
-    complexity: [ERROR, 5],
-    'max-params': [ERROR, 4],
-    'max-statements': [ERROR, 7],
-    'max-statements-per-line': [ERROR, { max: 1 }],
-    'max-nested-callbacks': [ERROR, 2],
-    'max-depth': [ERROR, { max: 3 }],
+    complexity: [WARN, 5],
+    'max-params': [WARN, 4],
+    'max-statements': [WARN, 7],
+    'max-statements-per-line': [WARN, { max: 1 }],
+    'max-nested-callbacks': [WARN, 2],
+    'max-depth': [WARN, { max: 3 }],
     'max-lines': [
-      ERROR,
+      WARN,
       {
         max: 150,
         skipBlankLines: true,

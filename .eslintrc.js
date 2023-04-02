@@ -1,4 +1,4 @@
-const ON = 2;
+const ERROR = 2;
 const OFF = 0;
 const WARN = 1;
 
@@ -39,7 +39,7 @@ module.exports = {
   },
   rules: {
     /** Arrow function の return は必要ない場合省略する。 */
-    'arrow-body-style': [ON, 'as-needed'],
+    'arrow-body-style': [ERROR, 'as-needed'],
     // あんまり関数の巻き上げ気にする場面はないし、本当にやばいのは tsc がだいたい落とすのでOK
     'no-use-before-define': OFF,
     // wait 関数の邪魔
@@ -50,7 +50,7 @@ module.exports = {
     /** 条件分岐によって、戻り値を返す/返さないが統一されていることを保証する。TS で担保するため無効化。 */
     'consistent-return': OFF,
     /** `_` を先頭または末尾に付与することを禁止する。特殊な命名を除き有効。 */
-    'no-underscore-dangle': [ON, { allow: ['__dirname', '__filename'] }],
+    'no-underscore-dangle': [ERROR, { allow: ['__dirname', '__filename'] }],
     /** console API を許可する。むやみやったら使わないこと。 */
     'no-console': OFF,
     /** 関数の代入式を return するのを許可する。Arrow function のみ無効化したいがオプションがないので仕方なく全部許可。 */
@@ -66,12 +66,12 @@ module.exports = {
 
     /** 未使用の変数を禁止する。 TS 側の設定のみ有効にしている。 */
     'no-unused-vars': OFF,
-    '@typescript-eslint/no-unused-vars': ON,
+    '@typescript-eslint/no-unused-vars': ERROR,
 
     /** switch ですべての値を網羅していることを強制する。 */
-    '@typescript-eslint/switch-exhaustiveness-check': ON,
+    '@typescript-eslint/switch-exhaustiveness-check': ERROR,
     /** 型情報のみ用いている要素は type-only import を強制する。 */
-    '@typescript-eslint/consistent-type-imports': ON,
+    '@typescript-eslint/consistent-type-imports': ERROR,
     /** Mutable な引数には readonly (Readonly) を強制する。ルールが制御困難なため無効化するが、基本的に付与すること。 */
     '@typescript-eslint/prefer-readonly-parameter-types': OFF,
     /** async function が await を利用してなくても構わない。Promise を返却するために利用するケースがあるため。 */
@@ -82,7 +82,7 @@ module.exports = {
     '@typescript-eslint/no-misused-promises': ['error', { checksVoidReturn: false }],
     /** 関数/メソッドの戻り値型を強制する */
     '@typescript-eslint/explicit-function-return-type': [
-      ON,
+      ERROR,
       {
         /** 引数はなくても良い */
         allowExpressions: true,
@@ -99,7 +99,7 @@ module.exports = {
 
     /** 略語による命名を一部の例外を除き禁止する。 */
     'unicorn/prevent-abbreviations': [
-      ON,
+      ERROR,
       {
         replacements: {
           i: { index: false },
@@ -155,7 +155,7 @@ module.exports = {
     'import/order': OFF,
     // default export は禁止
     'import/prefer-default-export': OFF,
-    'import/no-default-export': ON,
+    'import/no-default-export': ERROR,
     /** うまく動かない */
     'import/no-unresolved': OFF,
     'import/extensions': [
@@ -170,10 +170,10 @@ module.exports = {
     ],
 
     /** `<button />` に `type` Prop を強要する。意図しない Submit を防ぐため。 */
-    'react/button-has-type': ON,
+    'react/button-has-type': ERROR,
     /** Props | State は Object Destructuring して参照する */
     'react/destructuring-assignment': [
-      ON,
+      ERROR,
       'always',
       {
         /** クラスフィールドは除外 */
@@ -185,64 +185,64 @@ module.exports = {
     /** HOC (ex. memo) の際にのみなぜか怒られる。無効化。 */
     'react/display-name': OFF,
     /** `className` `style` など複雑性を著しく増加させる気配のする Prop を禁止する。 */
-    'react/forbid-component-props': ON,
+    'react/forbid-component-props': ERROR,
     // Component は Arrow function
-    'react/function-component-definition': [ON, { namedComponents: 'arrow-function' }],
+    'react/function-component-definition': [ERROR, { namedComponents: 'arrow-function' }],
     /** `useState` の命名を `[foo, setFoo]` というルールで強制する。ただし Object destructuring している場合は除く。 */
     /** @todo なぜかエラーになってしまう。 ESLint: 8.27.0, eslint-plugin-react: 7.31.0 */
     // 'react/hook-use-state': [ON, { allowDestructuredState: true }],
     /** `boolean` の Prop で値を取る必要がない場合はつけない。 */
-    'react/jsx-boolean-value': [ON, 'never', { always: [] }],
+    'react/jsx-boolean-value': [ERROR, 'never', { always: [] }],
     /** タグを閉じる `>` の位置を固定する。 */
-    'react/jsx-closing-bracket-location': [ON, 'line-aligned'],
+    'react/jsx-closing-bracket-location': [ERROR, 'line-aligned'],
     /** 閉じタグの位置を固定する。 */
-    'react/jsx-closing-tag-location': ON,
+    'react/jsx-closing-tag-location': ERROR,
     /** 文字列指定できる Prop や children の書き方を統一する。 */
-    'react/jsx-curly-spacing': [ON, 'never', { allowMultiline: true }],
+    'react/jsx-curly-spacing': [ERROR, 'never', { allowMultiline: true }],
     /** JSX 中の `{ }` の中で無駄な改行を挟めないようにする */
     'react/jsx-curly-newline': [
-      ON,
+      ERROR,
       {
         multiline: 'consistent',
         singleline: 'consistent',
       },
     ],
     /** `=` の周囲のスペースを基本なしで固定 */
-    'react/jsx-equals-spacing': [ON, 'never'],
+    'react/jsx-equals-spacing': [ERROR, 'never'],
     /** JSX を `.tsx` でも許可する */
-    'react/jsx-filename-extension': [ON, { extensions: ['.tsx', '.jsx'] }],
+    'react/jsx-filename-extension': [ERROR, { extensions: ['.tsx', '.jsx'] }],
     /** Props の改行を固定 */
-    'react/jsx-first-prop-new-line': [ON, 'multiline-multiprop'],
+    'react/jsx-first-prop-new-line': [ERROR, 'multiline-multiprop'],
     /** Fragment は必要のない限りシンプルな記法で統一 */
-    'react/jsx-fragments': [ON, 'syntax'],
+    'react/jsx-fragments': [ERROR, 'syntax'],
     /** JSX のインデントは `2` */
-    'react/jsx-indent': [ON, 2],
+    'react/jsx-indent': [ERROR, 2],
     /** Props が関係するインデントは `2` */
-    'react/jsx-indent-props': [ON, 2],
+    'react/jsx-indent-props': [ERROR, 2],
     /** `.bind()` 禁止 */
-    'react/jsx-no-bind': ON,
+    'react/jsx-no-bind': ERROR,
     /** Context に `useMemo` `useCallback` されてない値を渡すのを禁止する。 */
-    'react/jsx-no-constructed-context-values': ON,
+    'react/jsx-no-constructed-context-values': ERROR,
     /** JSX で `&&` を禁止する。予期せぬレンダリングを防止するため。 */
-    'react/jsx-no-leaked-render': ON,
+    'react/jsx-no-leaked-render': ERROR,
     /** `a` タグに `javascript:` を渡すことを禁止する。危険。 */
-    'react/jsx-no-script-url': ON,
+    'react/jsx-no-script-url': ERROR,
     /** 意味の無い Fragment を禁止する。ただし変数展開のために使用するのは許容する。 `<>{'\u00A0'}</>` のような特殊文字を許可するため。 */
-    'react/jsx-no-useless-fragment': [ON, { allowExpressions: true }],
+    'react/jsx-no-useless-fragment': [ERROR, { allowExpressions: true }],
     /**
      * 一行につき一コンポーネント
      * 半角スペースで区切られたパラグラフ + React Componentなどに対応できないため重すぎる。無効化
      */
     // 'react/jsx-one-expression-per-line': [ON, { allow: 'single-child' }],
     /** コンポーネントの命名は PascalCase で統一する。 */
-    'react/jsx-pascal-case': ON,
+    'react/jsx-pascal-case': ERROR,
     /** JSX 中の連続した改行やスペースを禁止する */
-    'react/jsx-props-no-multi-spaces': ON,
+    'react/jsx-props-no-multi-spaces': ERROR,
     /** Props を Spread Operator で渡すのを禁止する。 */
-    'react/jsx-props-no-spreading': ON,
+    'react/jsx-props-no-spreading': ERROR,
     /** JSX の細かいスペースを指定 */
     'react/jsx-tag-spacing': [
-      ON,
+      ERROR,
       {
         closingSlash: 'never',
         beforeSelfClosing: 'always',
@@ -252,7 +252,7 @@ module.exports = {
     ],
     /** JSX の細かい改行を指定 */
     'react/jsx-wrap-multilines': [
-      ON,
+      ERROR,
       {
         declaration: 'parens-new-line',
         assignment: 'parens-new-line',
@@ -264,46 +264,46 @@ module.exports = {
       },
     ],
     /** 初期化前に `setState` するのを禁止 */
-    'react/no-access-state-in-setstate': ON,
+    'react/no-access-state-in-setstate': ERROR,
     /** Iteration する際に `key` へ index を利用することを禁止する。 */
-    'react/no-array-index-key': ON,
+    'react/no-array-index-key': ERROR,
     /** Lifecycle methods で Arrow function の利用を禁止する。テストやパフォーマンスに悪影響を及ぼすため。 */
-    'react/no-arrow-function-lifecycle': ON,
+    'react/no-arrow-function-lifecycle': ERROR,
     /** dangerous...を禁止する。使う場合は明示的に無効化してコメントを書く。 */
-    'react/no-danger': ON,
+    'react/no-danger': ERROR,
     /** 無効な HTML Attribute を禁止する。 */
-    'react/no-invalid-html-attribute': ON,
+    'react/no-invalid-html-attribute': ERROR,
     /** React element の命名に `Ns:foo` のような namespace を利用することを禁止する。 */
-    'react/no-namespace': ON,
+    'react/no-namespace': ERROR,
     /** Props の Default 値に新規インスタンスを作成する書き方を禁止する。 */
     /** @todo 7.31.0 ではまだない */
     // 'react/no-object-type-as-default-prop': ON,
     /** PureComponent で shouldComponentUpdate を使うことを禁止する。 */
-    'react/no-redundant-should-component-update': ON,
+    'react/no-redundant-should-component-update': ERROR,
     /** Function component の中で `this` を参照することを禁止する。 */
-    'react/no-this-in-sfc': ON,
+    'react/no-this-in-sfc': ERROR,
     /** ありがちな typo を禁止する。 */
-    'react/no-typos': ON,
+    'react/no-typos': ERROR,
     /** コンポーネントの中でネストしたコンポーネントの宣言を禁止する。 */
-    'react/no-unstable-nested-components': ON,
+    'react/no-unstable-nested-components': ERROR,
     /** 未使用の State を禁止する。 */
-    'react/no-unused-state': ON,
+    'react/no-unused-state': ERROR,
     /** `componentWillUpdate` の中で `setState` を禁止する。 */
     'react/no-will-update-set-state': OFF,
     /** Function component で書ける際はそれを強要する。 */
-    'react/prefer-stateless-function': [ON, { ignorePureComponents: true }],
+    'react/prefer-stateless-function': [ERROR, { ignorePureComponents: true }],
     /** Don't use propType. Every projects use TS. */
     'react/prop-types': OFF,
     /** `/>` で閉じれる際はそれを強要する。 */
-    'react/self-closing-comp': ON,
+    'react/self-closing-comp': ERROR,
     /** Class Component のメソッドを指定の順番で並べる。 */
-    'react/sort-comp': ON,
+    'react/sort-comp': ERROR,
     /** Class Component の State は constructor 外で初期化する */
-    'react/state-in-constructor': [ON, 'never'],
+    'react/state-in-constructor': [ERROR, 'never'],
     /** `style` という命名の Props は Object で固定する。 */
-    'react/style-prop-object': ON,
+    'react/style-prop-object': ERROR,
     /** `img` `br` など children をとらないタグが取ることを禁止する。 */
-    'react/void-dom-elements-no-children': ON,
+    'react/void-dom-elements-no-children': ERROR,
 
     /** 型で担保するので不要 */
     'react/require-default-props': OFF,
