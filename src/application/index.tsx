@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
-import { ErrorBoundary } from './components/ErrorBoundary';
+import { ErrorBoundary } from '../common/components/ErrorBoundary';
 import { NotFound } from '../features/NotFound';
 import { TodoMvc } from '../features/TodoMvc';
 import { LocalStorageProvider } from '../common/utils/contexts/LocalStorage';
