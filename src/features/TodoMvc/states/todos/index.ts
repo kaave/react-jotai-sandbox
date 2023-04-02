@@ -1,23 +1,28 @@
-import { atom, useAtom } from 'jotai';
+/**
+ * @file すべての Todo について管理する。
+ */
+
+import { atom, useAtom, type ExtractAtomValue } from 'jotai';
 import type { Todo } from '../../models/Todo';
 
-type Todos = readonly Todo[];
+type Todos = Todo[];
 
 type TodoCommands = {
-  add: (todos: readonly Todo[]) => void;
+  add: (todos: Readonly<Todos>) => void;
   remove: (ids: readonly Todo['id'][]) => void;
-  update: (todos: readonly Todo[]) => void;
+  update: (todos: Readonly<Todos>) => void;
 };
 
 const todoAtom = atom<Readonly<Todos>>([]);
 
-export function useTodosQuery(): Todos {
+export function useTodosQuery(): ExtractAtomValue<typeof todoAtom> {
   const [todos] = useAtom(todoAtom);
 
+  // Note: ここでビジネスロジックが混じらない加工ならやってしまってよい。どんなものかはイメージがまだ湧いてない。
   return todos;
 }
 
-export function useTodosCommands(): TodoCommands {
+export function useTodosCommands(): Readonly<TodoCommands> {
   const [, setTodos] = useAtom(todoAtom);
 
   return {
