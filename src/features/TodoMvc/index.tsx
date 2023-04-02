@@ -9,6 +9,7 @@ import { bodyText } from './models/Todo/bodyText';
 import { useTodosQuery } from './states/todos';
 import { useInteractors } from './interactors';
 import type { Todo } from './models/Todo';
+import { positiveInteger, type PositiveInteger } from '../../libs/utils/specificNumbers';
 
 type TodoListProps = ComponentProps<typeof TodoList>;
 
@@ -73,7 +74,7 @@ type PageState = {
   /** Completed が一個でもあるか。 */
   hasCompleted: boolean;
   /** Backlog の件数。 */
-  backlogCount: number;
+  backlogCount: PositiveInteger;
   /** 表示する Todo の一覧 */
   presentationTodos: readonly Todo[];
 };
@@ -98,7 +99,7 @@ export function useTodoMvc(pathname: string): { states: PageState; handlers: Pag
 
   const todoListIsVisible = todos.length > 0;
   const hasCompleted = useMemo(() => todos.some(t => t.completed), [todos]);
-  const backlogCount = useMemo(() => todos.filter(t => !t.completed).length, [todos]);
+  const backlogCount = useMemo(() => positiveInteger(todos.filter(t => !t.completed).length, 'unsafe'), [todos]);
   const presentationTodos = useMemo(
     () => todos.filter(t => pathname === '/' || (pathname === '/active' ? !t.completed : t.completed)),
     [pathname, todos],
