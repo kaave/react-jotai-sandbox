@@ -6,9 +6,8 @@ import { UnderBar } from './components/UnderBar';
 import { uuid } from '../../libs/utils/uuid';
 import styles from './index.module.css';
 import { bodyText } from './models/Todo/bodyText';
-import { useTodosCommands, useTodosQuery } from './states/todos';
-import { useNewTodo } from './interactors/newTodo';
-import { useDeleteTodo } from './interactors/deleteTodo';
+import { useTodosQuery } from './states/todos';
+import { useInteractors } from './interactors';
 
 type TodoListProps = ComponentProps<typeof TodoList>;
 
@@ -18,9 +17,7 @@ type Props = {
 
 export const TodoMvc = ({ pathname }: Props): JSX.Element => {
   const todos = useTodosQuery();
-  const { update } = useTodosCommands();
-  const newTodo = useNewTodo();
-  const deleteTodo = useDeleteTodo();
+  const { newTodo, deleteTodo, toggleActive, changeBodyText, toggleAll } = useInteractors();
 
   const hasCompleted = useMemo(() => todos.some(t => t.completed), [todos]);
   const backlogCount = useMemo(() => todos.filter(t => !t.completed).length, [todos]);
@@ -52,8 +49,13 @@ export const TodoMvc = ({ pathname }: Props): JSX.Element => {
   );
 
   const toggleHandler = useCallback<TodoListProps['onToggle']>(
-    id => update(todos.map(t => (t.id === id ? { ...t, completed: !t.completed } : t))),
-    [todos, update],
+    idProposal => {
+      const id = uuid(idProposal);
+      if (!(id instanceof Error)) {
+        toggleActive(id);
+      }
+    },
+    [toggleActive],
   );
 
   const handleChangeText = useCallback<TodoListProps['onChangeText']>(
@@ -64,14 +66,14 @@ export const TodoMvc = ({ pathname }: Props): JSX.Element => {
         return;
       }
 
-      update(todos.map(t => (t.id === id ? { ...t, bodyText: bodyTextProposal } : t)));
+      changeBodyText(id, bodyTextProposal);
     },
-    [todos, update],
+    [changeBodyText],
   );
 
   const toggleAllCheckboxHandler = useCallback<TodoListProps['onToggleAll']>(
-    checked => update(todos.map(t => ({ ...t, completed: checked }))),
-    [todos, update],
+    checked => toggleAll(checked),
+    [toggleAll],
   );
 
   const handleClearCompleted = useCallback(
