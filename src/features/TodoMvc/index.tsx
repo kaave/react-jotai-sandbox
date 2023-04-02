@@ -1,4 +1,4 @@
-import { memo, type ComponentProps } from 'react';
+import { memo, type ComponentProps, useEffect } from 'react';
 import { useCallback, useMemo } from 'react';
 import { NewTodoInput } from './components/NewTodoInput';
 import { TodoList } from './components/TodoList';
@@ -10,6 +10,8 @@ import { useTodosQuery } from './states/todos';
 import { useInteractors } from './interactors';
 import type { Todo } from './models/Todo';
 import { positiveInteger, type PositiveInteger } from '../../libs/utils/specificNumbers';
+import { localStorageKeys, nowDevelopment } from '../../common/utils/contexts/LocalStorage/constants';
+import { useLocalStorage } from '../../common/utils/contexts/LocalStorage';
 
 type TodoListProps = ComponentProps<typeof TodoList>;
 
@@ -23,6 +25,10 @@ export const TodoMvc = ({ pathname }: Props): JSX.Element => {
   // eslint-disable-next-line react/jsx-props-no-spreading
   return <TodoMvcStructure {...props} />;
 };
+
+if (nowDevelopment) {
+  TodoMvc.displayName = 'TodoMvc';
+}
 
 // Note: この Props の組み方だと memo の意味たぶんあんまないよな…。
 const TodoMvcStructure = memo(
@@ -65,8 +71,6 @@ const TodoMvcStructure = memo(
   ),
 );
 
-TodoMvcStructure.displayName = 'TodoMvcStructure';
-
 type PageState = {
   pathname: string;
   /** TodoList を表示するか。 */
@@ -88,8 +92,9 @@ type PageHandlers = {
   handleClearCompleted: () => void;
 };
 
-/** Export するのは実質テストのため */
+// Note: Export するのは実質テストのため
 export function useTodoMvc(pathname: string): { states: PageState; handlers: PageHandlers } {
+  const localStorage = useLocalStorage();
   const todos = useTodosQuery();
   const { newTodo, deleteTodo, toggleActive, changeBodyText, toggleAll } = useInteractors();
 
@@ -104,6 +109,14 @@ export function useTodoMvc(pathname: string): { states: PageState; handlers: Pag
     () => todos.filter(t => pathname === '/' || (pathname === '/active' ? !t.completed : t.completed)),
     [pathname, todos],
   );
+
+  /*
+   * side effects
+   */
+  // Note: Todo が更新されたら保存する。手抜き。
+  useEffect(() => {
+    localStorage.setItem(localStorageKeys.todos, JSON.stringify(todos));
+  }, [localStorage, todos]);
 
   /*
    * Event handlers

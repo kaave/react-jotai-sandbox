@@ -4,6 +4,7 @@
 
 import { atom, useAtom, type ExtractAtomValue } from 'jotai';
 import type { Todo } from '../../models/Todo';
+import { localStorageKeys } from '../../../../common/utils/contexts/LocalStorage/constants';
 
 type Todos = Todo[];
 
@@ -13,7 +14,10 @@ type TodoCommands = {
   update: (todos: Readonly<Todos>) => void;
 };
 
-const todoAtom = atom<Readonly<Todos>>([]);
+// Note: こういうのをセキュアにしたい
+const defaultTodos: Todos = JSON.parse(window.localStorage.getItem(localStorageKeys.todos) ?? '[]') as Todos;
+
+const todoAtom = atom<Readonly<Todos>>(defaultTodos);
 
 export function useTodosQuery(): ExtractAtomValue<typeof todoAtom> {
   const [todos] = useAtom(todoAtom);

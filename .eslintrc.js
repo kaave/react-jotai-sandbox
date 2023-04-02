@@ -182,6 +182,8 @@ module.exports = {
         destructureInSignature: 'always',
       },
     ],
+    /** HOC (ex. memo) の際にのみなぜか怒られる。無効化。 */
+    'react/display-name': OFF,
     /** `className` `style` など複雑性を著しく増加させる気配のする Prop を禁止する。 */
     'react/forbid-component-props': ON,
     // Component は Arrow function

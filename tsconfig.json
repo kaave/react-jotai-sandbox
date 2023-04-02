@@ -4,7 +4,8 @@
         /*
          * override extends
          */
-        // オーバーライドを明示的にする Reactと相性が悪いので無効化
+        // オーバーライド時に明示的な Label を強要する。
+        // React の Class Component と相性が悪い（冗長になる）ので無効化
         "noImplicitOverride": false,
 
         /*

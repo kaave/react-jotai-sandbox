@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { NotFound } from '../features/NotFound';
 import { TodoMvc } from '../features/TodoMvc';
+import { LocalStorageProvider } from '../common/utils/contexts/LocalStorage';
 // import { LocalStorageKey } from './model';
 // import type { ComponentProps } from 'react';
 // import { useEffect } from 'react';
@@ -9,15 +10,17 @@ import { TodoMvc } from '../features/TodoMvc';
 
 export const App = (): JSX.Element => (
   <ErrorBoundary>
-    <BrowserRouter>
-      <Core />
-    </BrowserRouter>
+    <LocalStorageProvider storage={window.localStorage}>
+      <BrowserRouter>
+        <Core />
+      </BrowserRouter>
+    </LocalStorageProvider>
   </ErrorBoundary>
 );
 
 // type SetAppState = (fn: (prevState: ApplicationState) => ApplicationState) => void;
 
-const Core = (): JSX.Element => 
+const Core = (): JSX.Element => (
   // const appState = useApplicationQuery();
   // const dispatcher = useApplicationCommands();
 
@@ -31,17 +34,14 @@ const Core = (): JSX.Element =>
   //   );
   // }, [appState]);
 
-   (
-     <Routes>
-       {/* Note: こうしないと pathname なしが NotFound にマッチしてしまう */}
-       <Route path="/" element={<TodoMvcElement />}>
-         <Route path=":pathname" />
-       </Route>
-       <Route path="*" element={<NotFound />} />
-     </Routes>
-  )
-;
-
+  <Routes>
+    {/* Note: こうしないと pathname なしが NotFound にマッチしてしまう */}
+    <Route path="/" element={<TodoMvcElement />}>
+      <Route path=":pathname" />
+    </Route>
+    <Route path="*" element={<NotFound />} />
+  </Routes>
+);
 const TodoMvcElement = (): JSX.Element => {
   const { pathname = '' } = useParams();
 
